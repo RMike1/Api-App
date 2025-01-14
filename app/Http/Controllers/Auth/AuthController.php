@@ -18,10 +18,8 @@ class AuthController extends Controller
             'password' => 'required|min:8|confirmed',
         ]);
         $user = User::create($validated);
-        $token = $user->createToken($validated['email'])->plainTextToken;
         return response()->json([
             'user' => $user,
-            'token' => $token,
         ]);
     }
     public function login(Request $request)
@@ -48,9 +46,11 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        // $request->user()->currentAccessToken()->delete();
         $request->user()->tokens()->delete();
         return response()->json([
-            'message' => 'Logged out successfully..!',
+            'message' => 'Logged out succesffully..'
         ]);
     }
+    
 }
