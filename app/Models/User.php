@@ -46,4 +46,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function sendPasswordResetNotification($token)
+    {
+
+        $url = 'https://127.0.0.1:8000/reset-password?token=' . $token;
+
+        // $this->notify(new ResetPasswordNotification($url));
+    }
 }
