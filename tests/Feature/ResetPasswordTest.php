@@ -13,7 +13,9 @@ beforeEach(function () {
 });
 
 
-it('does not reset the password with an invalid token',fn() =>
+it(
+    'does not reset the password with an invalid token',
+    fn() =>
     $this->postJson(route('reset.password'), [
         'email' => $this->user->email,
         'password' => 12345678,
@@ -22,7 +24,9 @@ it('does not reset the password with an invalid token',fn() =>
     ])->assertStatus(500)
 );
 
-it('does not reset the password when the email is missing',closure: fn() =>
+it(
+    'does not reset the password when the email is missing',
+    closure: fn() =>
     $this->postJson(route('reset.password'), [
         'token' => Password::createToken($this->user),
         'password' => 12345678,
@@ -31,7 +35,9 @@ it('does not reset the password when the email is missing',closure: fn() =>
         ->assertJsonValidationErrors(['email'])
 );
 
-it( 'does not reset the password when the passwords do not match',fn() =>
+it(
+    'does not reset the password when the passwords do not match',
+    fn() =>
     $this->postJson(route('reset.password'), [
         'email' => $this->user->email,
         'password' => 12345678,
