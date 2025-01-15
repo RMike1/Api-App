@@ -35,8 +35,7 @@ it(
         ->assertJsonValidationErrors(['email'])
 );
 
-it(
-    'does not reset the password when the passwords do not match',
+it('does not reset the password when the passwords do not match',
     fn() =>
     $this->postJson(route('reset.password'), [
         'email' => $this->user->email,
