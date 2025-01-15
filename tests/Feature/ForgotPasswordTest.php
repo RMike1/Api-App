@@ -10,19 +10,17 @@ beforeEach( function(){
     $this->user=User::factory()->create();
 });
 
-
-it('reset link to the user with a valid email', fn () =>
+it('sends password reset link to user', fn () =>
     $this->actingAs($this->user, 'sanctum')
     ->postJson('/api/forgot-password', [
         'email' => $this->user->email,
-    ])->assertStatus(200)
+    ])->assertOk()
     ->assertJson(['status' => __('passwords.sent')])
 );
 
-it('can not send reset link if email field is empty', fn() =>
+it('fails to send reset link when the email field is empty', fn() =>
     $this->actingAs($this->user, 'sanctum')
-    ->postJson(route('forgot.password'), [
-        'email' => '',
-    ])->assertStatus(422)
+    ->postJson(route('forgot.password'), ['email' => ''])
+    ->assertStatus(422)
     ->assertJsonValidationErrors(['email'])
 );

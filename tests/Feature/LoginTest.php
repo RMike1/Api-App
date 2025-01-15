@@ -12,7 +12,7 @@ beforeEach( function(){
     ]);
 });
 
-it('login with correct details ', fn () =>
+it('authenticates the user with valid credentials', fn () =>
     $this->postJson('/api/login', [
         'email' => $this->user->email,
         'password' => 12345678,
@@ -24,12 +24,11 @@ it('login with correct details ', fn () =>
     ])
 );
 
-it('cannot login with wrong credentials', function () {
+it('rejects login with invalid credentials', function () {
     $response = $this->postJson('/api/login', [
         'email' => $this->user->email,
         'password' => 123456789,
     ]);
-
     $response->assertStatus(401);
     $response->assertJson(['message' => 'Unauthorized']);
 });

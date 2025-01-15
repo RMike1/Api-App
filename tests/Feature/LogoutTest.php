@@ -5,11 +5,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('logs out an authenticated user', fn  () =>        
-    $this->actingAs(User::factory()->create(), 'sanctum')
-        ->postJson('/api/logout')
-        ->assertStatus(200)
-        ->assertExactJson([
-                 'message' => 'Successfully logged out...',
-             ])
-);
+it('logs out the authenticated user', function () {
+    $user = User::factory()->create();
+    $token = $user->createToken('TestToken')->plainTextToken;
+    $this->withHeaders([
+        'Authorization' => 'Bearer ' . $token,
+    ])->postJson('/api/logout')
+    ->assertStatus(200)
+    ->assertJson(['message' => 'Successfully logged out...']);
+    $this->assertCount(0, $user->tokens);
+});

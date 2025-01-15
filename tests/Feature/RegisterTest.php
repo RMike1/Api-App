@@ -3,8 +3,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('registers a new user successfully')
-->defer(fn()=>
+it('registers a new user')
+->defer(fn(): mixed=>
     $this->postJson('/api/register', [
        'name' => 'Jon',
        'email' => 'jon@gmail.com',
