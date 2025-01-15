@@ -16,21 +16,19 @@ it('authenticates the user with valid credentials', fn () =>
     $this->postJson('/api/login', [
         'email' => $this->user->email,
         'password' => 12345678,
-    ])
-    ->assertStatus(200)
+    ])->assertStatus(200)
     ->assertJsonStructure([
         'user' => ['name', 'email'],
         'token'
     ])
 );
 
-it('rejects login with invalid credentials', function () {
-    $response = $this->postJson('/api/login', [
+it('rejects login with invalid credentials', fn()=>
+    $this->postJson('/api/login', [
         'email' => $this->user->email,
         'password' => 123456789,
-    ]);
-    $response->assertStatus(401);
-    $response->assertJson(['message' => 'Unauthorized']);
-});
+    ])->assertStatus(401)
+    ->assertJson(['message' => 'Unauthorized'])
+);
 
 
