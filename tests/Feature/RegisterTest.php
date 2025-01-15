@@ -1,7 +1,12 @@
 <?php
+
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
+beforeEach(function () {
+    $this->user = User::factory()->create();
+});
 
 it('registers new user')
     ->defer(
@@ -47,3 +52,16 @@ it('fails to register when passwords are not match')
     )->assertDatabaseMissing('users', [
         'email' => 'jon@gmail.com',
     ]);
+
+it('fails when registering with an existing email')->defer(
+    fn() =>
+    $this->postJson('api/register', [
+        'name' => 'jon',
+        'email' => $this->user->email,
+        'password' => '1234567890',
+        'password_confirmation' => '1234567890',
+    ])->assertStatus(422)
+        ->assertJsonValidationErrors(['email'])
+)
+->assertDatabaseCount('users',1)
+->assertDatabaseMissing('users', ['email' => 'jon@gmail.com']);
