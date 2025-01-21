@@ -19,7 +19,7 @@ test('users can login', function () {
     $this->postJson('/api/login', [
         'email' => $this->user->email,
         'password' => '12345678',
-    ])->assertStatus(200)
+    ])->assertStatus(201)
     ->assertJsonStructure([
         'user' => ['name','email'],
         'token',
@@ -29,7 +29,7 @@ test('users can login', function () {
 test('user can not authenticate with invalid password')->postJson('/api/login', [
         'email' => 'jon@gmail.com',
         'password' => '123456789',
-    ])->assertStatus(401)->assertJson(['message' => 'These credentials do not match our records.']);
+    ])->assertStatus(422)->assertJson(['message' => 'These credentials do not match our records.']);
 
 test('users can logout', function () {
     Sanctum::actingAs(User::factory()->create());

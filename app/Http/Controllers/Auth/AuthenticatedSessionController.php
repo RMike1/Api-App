@@ -18,18 +18,14 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        $validated = $request->validated();
-        $user = User::where('email', $validated['email'])->first();
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
-            return response()->json([
-                'message' => 'These credentials do not match our records.',
-            ],401);
-        }
-        $token = $user->createToken($validated['email'])->plainTextToken;
-        return response()->json([
-            'user' => $user,
-            'token' => $token,
-        ]);
+        $request->authenticate();
+        $user = User::where('email', $request->email)->first();
+        $data = [
+            'user'=> $user,
+            'token' => $user->createToken($user->email)->plainTextToken,
+        ];
+
+        return response()->json($data, 201);
     }
 
     /**
