@@ -1,5 +1,6 @@
-## Setting Up and Running Laravel Auth API App
-This is a simple Laravel-based API authentication system built using Laravel Sanctum and Laravel Breeze. It provides endpoints for user registration, login, logout, forgot password, reset password and email verification
+## API Authentication App
+
+This is Laravel based API authentication system built using Laravel Sanctum and Laravel Breeze. It provides endpoints for user registration, login, logout, forgot password, reset password and email verification.
 
 ### Features
 
@@ -32,8 +33,6 @@ composer install
 Copy the .env.example file to create a .env file and .env.testing (For testing):
 ```shell
 cp .env.example .env
-```
-```shell
 cp .env.example .env.testing
 ```
 
@@ -59,7 +58,7 @@ php artisan serve
  POST /api/register
 ```
 
-- Login to get token:
+- Login
 ```shell
  POST /api/login
 ```
