@@ -29,9 +29,7 @@ class RegisteredUserController extends Controller
         $user = User::create($validated);
 
         event(new Registered($user));
-        $token = $user->createToken($validated['name'])->plainTextToken;
         return response()->json([
-            'token' => $token,
             'user' => $user,
         ]);
     }

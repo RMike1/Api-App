@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -15,12 +18,17 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        $request->authenticate();
-        $user = $request->user();
-        $token = $user->createToken($request->email)->plainTextToken;
+        $validated = $request->validated();
+        $user = User::where('email', $validated['email'])->first();
+        if (!$user || !Hash::check($validated['password'], $user->password)) {
+            return response()->json([
+                'message' => 'These credentials do not match our records.',
+            ],401);
+        }
+        $token = $user->createToken($validated['email'])->plainTextToken;
         return response()->json([
-            'token' => $token,
             'user' => $user,
+            'token' => $token,
         ]);
     }
 
@@ -29,11 +37,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request)
     {
-        // Auth::guard('web')->logout();
-        // $request->session()->invalidate();
-        // $request->session()->regenerateToken();
-        // return response()->noContent();
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Logged out successfully']);
+        $token = $request->user()->currentAccessToken();
+
+        if ($token) {
+            $token->delete();
+
+            return response()->json([
+                'message' => 'Logged out successfully',
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => 'Unauthenticated.',
+        ], 401);
     }
 }

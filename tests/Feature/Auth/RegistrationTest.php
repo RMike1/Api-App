@@ -12,8 +12,7 @@ it('registers new user', function () {
     ];
     $this->postJson('/api/register', $userData)
     ->assertStatus(200)
-             ->assertJsonStructure([
-                 'token',
+    ->assertJsonStructure([
                  'user' => ['name','email'],
              ]);
     $this->assertDatabaseHas('users', [
