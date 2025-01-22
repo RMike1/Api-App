@@ -28,7 +28,7 @@ jobs:
       - name: copy .env and env.testing file
         run: |
             cp .env.example .env
-            cp .env.testing.example .env.testing
+            cp .env.example .env.testing
       - name: install Composer
         run: |
           composer install --no-interaction
