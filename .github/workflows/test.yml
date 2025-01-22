@@ -28,9 +28,13 @@ jobs:
       - name: copy .env and env.testing file
         run: |
             cp .env.example .env
+            cp .env.testing.example .env.testing
       - name: install Composer
         run: |
           composer install --no-interaction
+      - name: Generate application key
+        run: |
+          php artisan key:generate
       - name: Run tests
         run: |
           ./vendor/bin/pest
