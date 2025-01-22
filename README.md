@@ -2,6 +2,8 @@
 
 This is Laravel based API authentication system built using Laravel Sanctum and Laravel Breeze. It provides endpoints for user registration, login, logout, forgot password, reset password and email verification.
 
+[![Tests](https://github.com/RMike1/Api-App/actions/workflows/test.yml/badge.svg?branch=dev)](https://github.com/RMike1/Api-App/actions/workflows/test.yml)
+
 ### Features
 
 - User registration, login and logout.
