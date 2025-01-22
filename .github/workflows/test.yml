@@ -1,0 +1,29 @@
+name: Tests
+on: 
+  pull_request:
+    branches:
+      - master
+      - dev
+  push:
+    branches:
+      - master
+      - dev
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3.12'
+      - name: copy .env and env.testing file
+          run: |
+            cp .env.example .env
+      - name: install Composer
+        run: |
+          composer install --no-interaction
+      - name: Run tests
+        run: |
+          ./vendor/bin/pest
